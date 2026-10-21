@@ -18,6 +18,10 @@ logger:
 # Native API, NO encryption key. This is deliberate for the lab: add in HA via
 # Add Integration -> ESPHome -> <IP shown on screen>:6053, leave the key blank.
 api:
+  # Let a SMALL GROUP of Home Assistant instances share one sensor at once.
+  # ESP32 default is 5 simultaneous API clients; we raise it to 10 (max 20, each
+  # slot ~0.5-1 KB RAM). For a whole class on one device, use MQTT fan-out instead.
+  max_connections: 10
 
 ota:
   - platform: esphome
