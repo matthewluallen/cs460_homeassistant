@@ -1,0 +1,18 @@
+# SENSOR package: M5 DLight -> BH1750FVI ambient-light (lux). PORT.A I2C @ 0x23.
+# Native ESPHome bh1750 platform.
+
+i2c:
+  sda: ${sda_pin}
+  scl: ${scl_pin}
+  scan: true
+
+sensor:
+  - platform: bh1750
+    name: "Illuminance"
+    address: 0x23
+    update_interval: 2s
+    id: lux
+    on_value:
+      then:
+        - lambda: |-
+            char b[32]; snprintf(b, sizeof(b), "Light %.0f lx", x); id(disp_line) = b;

@@ -1,0 +1,63 @@
+# HOST package: M5Stack Cardputer (StampS3 / ESP32-S3).
+#
+# Grove / HY2.0 "PORT.CUSTOM":  white = G1 = GPIO1,  yellow = G2 = GPIO2
+#   (red = 5V, black = GND). These are plain GPIO, usable as I2C / UART / digital.
+# PORT.A I2C convention (M5):  SDA = yellow (GPIO2),  SCL = white (GPIO1).
+# Display: ST7789V2, 240x135, pins confirmed on hardware (Module 5 dry-run).
+#
+# This package sets the per-host pin substitutions that the SENSOR packages
+# consume (${sda_pin} ${scl_pin} ${white_pin} ${yellow_pin}) and drives the
+# on-screen status (title + IP + the generic disp_line + the HA add-by-IP hint).
+
+substitutions:
+  board_id: esp32-s3-devkitc-1   # generic ESP32-S3 board; proven on this unit
+  sda_pin: GPIO2                 # Grove yellow / G2
+  scl_pin: GPIO1                 # Grove white  / G1
+  white_pin: GPIO1               # Grove white  / G1 (digital-in / UART->host RX / ADC1_CH0)
+  yellow_pin: GPIO2              # Grove yellow / G2 (digital-in / ADC1_CH1)
+
+esp32:
+  board: ${board_id}
+  framework:
+    type: esp-idf
+
+font:
+  - file: "gfonts://Roboto"      # downloaded at build time; no font file to ship
+    id: big
+    size: 22
+  - file: "gfonts://Roboto"
+    id: small
+    size: 14
+
+spi:
+  clk_pin: GPIO36
+  mosi_pin: GPIO35
+
+output:
+  - platform: ledc
+    pin: GPIO38
+    id: backlight_out
+light:
+  - platform: monochromatic
+    output: backlight_out
+    name: "Backlight"
+    restore_mode: ALWAYS_ON
+
+display:
+  - platform: st7789v
+    model: TTGO TDisplay 135x240
+    rotation: 90
+    cs_pin: GPIO37
+    dc_pin: GPIO34
+    reset_pin: GPIO33
+    update_interval: 2s
+    lambda: |-
+      it.fill(Color::BLACK);
+      it.printf(4, 2, id(small), "${friendly_name}");
+      if (id(wifi_ip).has_state() && id(wifi_ip).state.length() > 0)
+        it.printf(4, 24, id(big), "IP %s", id(wifi_ip).state.c_str());
+      else
+        it.printf(4, 24, id(big), "WiFi: setup AP");
+      if (!id(disp_line).empty())
+        it.printf(4, 66, id(small), "%s", id(disp_line).c_str());
+      it.printf(4, 114, id(small), "Add in HA: ESPHome -> this IP:6053");

@@ -1,0 +1,28 @@
+# SENSOR package: M5 GPS (AT6558, BeiDou + GPS, MAX2659 LNA). PORT.C UART, NMEA @ 9600.
+#   unit TX = white wire -> host RX = ${white_pin}.  (host TX to the unit is optional;
+#   we only read NMEA, so one wire + GND is enough.)
+# Native ESPHome gps component (wraps TinyGPS++). Sensors nest under `gps:`.
+
+uart:
+  rx_pin: ${white_pin}
+  baud_rate: 9600
+  rx_buffer_size: 512
+
+gps:
+  latitude:
+    name: "Latitude"
+  longitude:
+    name: "Longitude"
+  altitude:
+    name: "Altitude"
+  speed:
+    name: "Speed"
+  course:
+    name: "Course"
+  satellites:
+    name: "Satellites"
+    id: sats
+    on_value:
+      then:
+        - lambda: |-
+            char b[32]; snprintf(b, sizeof(b), "GPS sats %.0f", x); id(disp_line) = b;

@@ -1,0 +1,18 @@
+# SENSOR package: M5 Hall -> A3144E hall-effect switch. PORT.B digital.
+#   white wire = digital output (buffered push-pull via a 74HC08D, active-LOW:
+#   output goes LOW when a magnet is present). No external pull-up needed.
+# Reads as a gpio binary_sensor on the white-wire GPIO.
+#
+# Tip: if your unit reads inverted (ON with no magnet), flip `inverted:` below.
+
+binary_sensor:
+  - platform: gpio
+    name: "Magnet Detected"
+    pin:
+      number: ${white_pin}
+      inverted: true        # active-low: LOW == magnet present
+      mode:
+        input: true
+    on_state:
+      then:
+        - lambda: 'id(disp_line) = x ? std::string("Magnet: DETECTED") : std::string("Magnet: none");'

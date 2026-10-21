@@ -1,0 +1,44 @@
+# SENSOR package: M5 ENV Pro -> Bosch BME688 (temp / humidity / pressure + IAQ,
+# CO2-equivalent, breath-VOC). PORT.A I2C @ 0x77 (confirmed on hardware).
+# Uses the OFFICIAL ESPHome bme68x_bsec2 component.
+#
+# NOTE: the Bosch BSEC2 library is proprietary — enabling it means you must NOT
+# redistribute the compiled binary. Fine for in-class/personal builds.
+
+i2c:
+  sda: ${sda_pin}
+  scl: ${scl_pin}
+  scan: true
+
+bme68x_bsec2_i2c:
+  address: 0x77
+  model: bme688
+  operating_age: 28d
+  sample_rate: LP
+
+text_sensor:
+  - platform: bme68x_bsec2
+    iaq_accuracy:
+      name: "IAQ accuracy"
+
+sensor:
+  - platform: bme68x_bsec2
+    temperature: { name: "Temperature", id: t }
+    humidity:    { name: "Humidity", id: h }
+    pressure:    { name: "Pressure", id: p }
+    iaq:         { name: "IAQ", id: iaq }
+    co2_equivalent: { name: "CO2 equivalent" }
+    breath_voc_equivalent: { name: "Breath VOC equivalent" }
+
+# Feed the Cardputer screen (ignored on screenless hosts).
+interval:
+  - interval: 2s
+    then:
+      - lambda: |-
+          char b[48];
+          if (id(t).has_state())
+            snprintf(b, sizeof(b), "T %.1fC H %.0f%% IAQ %.0f",
+                     id(t).state, id(h).state, id(iaq).has_state() ? id(iaq).state : 0.0f);
+          else
+            snprintf(b, sizeof(b), "ENV warming up...");
+          id(disp_line) = b;

@@ -1,0 +1,25 @@
+# HOST package: M5Stack AtomS3 / AtomS3 Lite (ESP32-S3).
+#
+# Grove / HY2.0 PORT:  white = G1 = GPIO1,  yellow = G2 = GPIO2  (same as Cardputer),
+#   red = 5V, black = GND.  PORT.A I2C: SDA = yellow (GPIO2), SCL = white (GPIO1).
+#
+# DISPLAY: the AtomS3 has a 0.85" GC9107 128x128 LCD that ESPHome does NOT drive
+# natively (GC9107 is not a supported display platform), and the AtomS3 Lite has
+# no screen at all. So this host ships SCREENLESS on purpose — read values in
+# Home Assistant. Everything else (Wi-Fi, API by IP, OTA, the sensor) is identical
+# to the Cardputer, so the same sensor packages work unchanged.
+
+substitutions:
+  board_id: esp32-s3-devkitc-1   # generic ESP32-S3 board (AtomS3 is ESP32-S3, 8MB)
+  sda_pin: GPIO2                 # Grove yellow / G2
+  scl_pin: GPIO1                 # Grove white  / G1
+  white_pin: GPIO1               # Grove white  / G1
+  yellow_pin: GPIO2              # Grove yellow / G2
+
+esp32:
+  board: ${board_id}
+  framework:
+    type: esp-idf
+
+# No display block (see note above). disp_line is still set by sensor packages;
+# it simply isn't rendered here.

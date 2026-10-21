@@ -1,0 +1,11 @@
+# DEVICE: Cardputer + Reflective IR (LM393: digital + analog).
+substitutions:
+  name: cardputer-reflective
+  friendly_name: "Cardputer Reflective IR"
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+packages:
+  base:   !include common/base.yaml
+  host:   !include hosts/cardputer.yaml
+  sensor: !include sensors/reflective-ir.yaml

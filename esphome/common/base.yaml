@@ -1,0 +1,44 @@
+# CS460 Module 5 — COMMON base package (shared by EVERY device).
+#
+# Included by each top-level device file via `packages:`. Contains only what is
+# identical across all hosts and all sensors:
+#   - Wi-Fi + captive-portal provisioning (first boot raises a "<name>-Setup" AP)
+#   - the native API with NO encryption key (students add the device in Home
+#     Assistant by IP only: Add Integration -> ESPHome -> <IP>:6053, key blank)
+#   - OTA updates, logging
+#   - the IP-address text sensor (so the screen / HA can show the IP)
+#   - a generic on-screen status line `disp_line` that each SENSOR package fills
+#     in, so one display block works no matter which module is attached.
+#
+# A device file supplies: substitutions (name, friendly_name) + three packages
+# (this base, one host, one sensor). Secrets live in secrets.yaml (see .example).
+
+logger:
+
+# Native API, NO encryption key. This is deliberate for the lab: add in HA via
+# Add Integration -> ESPHome -> <IP shown on screen>:6053, leave the key blank.
+api:
+
+ota:
+  - platform: esphome
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  ap:
+    ssid: "${name}-Setup"      # first-boot fallback hotspot for provisioning
+captive_portal:
+
+# A global string the host display prints. Sensor packages set id(disp_line)
+# so the same display code adapts to whatever module is attached.
+globals:
+  - id: disp_line
+    type: std::string
+    restore_value: no
+    initial_value: '""'
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: "IP Address"
+      id: wifi_ip

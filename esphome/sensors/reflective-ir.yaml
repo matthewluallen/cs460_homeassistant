@@ -1,0 +1,26 @@
+# SENSOR package: M5 Reflective IR -> IR emitter/receiver + LM393 comparator. PORT.B.
+#   yellow wire = digital TTL output (comparator: asserts when a reflective
+#                 surface / object is in range) -> gpio binary_sensor
+#   white  wire = analog output (raw IR receiver, 0-4095 on the ESP32 ADC) -> adc
+#
+# Tip: comparator polarity varies by unit + the on-board potentiometer threshold.
+# If "detected" is backwards, flip `inverted:` below.
+
+binary_sensor:
+  - platform: gpio
+    name: "Reflective IR Detected"
+    pin:
+      number: ${yellow_pin}
+      inverted: true
+      mode:
+        input: true
+    on_state:
+      then:
+        - lambda: 'id(disp_line) = x ? std::string("IR: reflect") : std::string("IR: clear");'
+
+sensor:
+  - platform: adc
+    name: "Reflective IR Analog"
+    pin: ${white_pin}
+    update_interval: 1s
+    attenuation: 12db       # full 0-3.3V range on ESP32-S3

@@ -1,0 +1,13 @@
+# DEVICE: AtomS3 + TMOS PIR — example of the SAME sensor package on a different host.
+# (AtomS3 is screenless under ESPHome; values appear in Home Assistant.)
+# Swap the sensor include to put any module on the AtomS3.
+substitutions:
+  name: atoms3-tmos
+  friendly_name: "AtomS3 TMOS"
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+packages:
+  base:   !include common/base.yaml
+  host:   !include hosts/atoms3.yaml
+  sensor: !include sensors/tmos-pir.yaml

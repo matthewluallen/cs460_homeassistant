@@ -1,0 +1,40 @@
+# SENSOR package: M5 TMOS PIR -> ST STHS34PF80 IR presence/motion. PORT.A I2C @ 0x5A.
+#
+# This is an I2C THERMAL-presence sensor (not a classic digital PIR): it reports
+# a presence value, a motion value, a temperature, plus two "detected" flags.
+# Uses M5Stack's own ESPHome external component. REQUIRES ESPHome >= 2026.2.2.
+
+external_components:
+  - source: github://m5stack/esphome-yaml/components
+    components: [sths34pf80]
+    refresh: 0s
+
+i2c:
+  sda: ${sda_pin}
+  scl: ${scl_pin}
+  scan: true
+
+sensor:
+  - platform: sths34pf80
+    id: tmos_pir
+    presence:
+      name: "TMOS Presence"
+      id: tmos_presence
+      on_value:
+        then:
+          - lambda: |-
+              char b[40]; snprintf(b, sizeof(b), "TMOS presence %.0f", x); id(disp_line) = b;
+    motion:
+      name: "TMOS Motion"
+    temperature:
+      name: "TMOS Temperature"
+    pres_flag:
+      name: "TMOS Presence Detected"
+    mot_flag:
+      name: "TMOS Motion Detected"
+    presence_threshold: 200
+    motion_threshold: 200
+    presence_hysteresis: 50
+    motion_hysteresis: 50
+    odr: 8
+    update_interval: 1s
