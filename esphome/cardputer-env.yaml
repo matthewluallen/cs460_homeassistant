@@ -25,9 +25,11 @@ esp32:
     type: esp-idf
 
 logger:
+# Native API with NO encryption key: students add the device in Home Assistant by
+# IP address only (Add Integration -> ESPHome -> <IP>:6053, leave the key blank).
+# This is what we validated on hardware; adding an encryption key here would mean
+# every student also has to copy a per-board key into HA, which we don't want.
 api:
-  encryption:
-    key: !secret api_encryption_key
 ota:
   - platform: esphome
 

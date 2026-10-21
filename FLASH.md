@@ -20,8 +20,8 @@ the serial write always happens in your own Chrome, to your own machine's USB. S
    docker compose --profile flash up -d
    ```
    Open the forwarded **6052** port (Ports tab) in **Chrome**.
-2. In `esphome/`, copy `secrets.yaml.example` to `secrets.yaml` and fill in Wi-Fi + an API encryption key
-   (the dashboard can generate the key). `secrets.yaml` is gitignored.
+2. In `esphome/`, copy `secrets.yaml.example` to `secrets.yaml` and fill in your **Wi-Fi SSID + password**.
+   That's all this firmware needs — no API encryption key. `secrets.yaml` is gitignored.
 3. Open **`cardputer-env.yaml`** in the dashboard. Confirm the **I2C pins** for the Grove port you're
    using (commonly SDA=GPIO2, SCL=GPIO1) and the BME688 address (`0x77`, some units `0x76`).
 4. Click **Install → Plug into this computer**. Chrome prompts for the serial port → pick the Cardputer →
@@ -30,13 +30,25 @@ the serial write always happens in your own Chrome, to your own machine's USB. S
    **"Cardputer-Setup"** hotspot — join it from a phone/laptop and enter the Wi-Fi credentials in the browser.
    (No keyboard driver needed.)
 6. The Cardputer **screen shows its IP address** once it's on Wi-Fi (plus live temp/humidity/IAQ). In Home
-   Assistant: **Add Integration → ESPHome → host = that IP : 6053** (+ the API encryption key). Entities
+   Assistant: **Settings → Devices & Services → Add Integration → ESPHome → host = that IP : 6053**, and
+   **leave the encryption key blank** (this firmware uses the plaintext native API — no key). Entities
    appear — and now you can compare the value **on the Cardputer screen** with the value **in HA**.
+
+   > **Add it by IP — auto-discovery won't find it.** Home Assistant normally discovers ESPHome devices by
+   > mDNS/zeroconf, but **multicast does not cross Tailscale**, so over the class tailnet the device never
+   > shows up on its own. Always add it **manually by the IP on the screen**. Your HA must also be on the
+   > tailnet with the subnet route accepted (`tsup`, which runs `tailscale up --accept-routes`) so that IP
+   > is routable.
 
 ## Confirmed working settings (validated on real hardware, Cardputer + ENV Pro)
 - Display: `model: TTGO TDisplay 135x240` + `rotation: 90` (the panel is the same ST7789V2 as a T-Display).
-- Sensor: BME688 at **I2C 0x76**, Grove pins **SDA=GPIO2, SCL=GPIO1** (M5 Grove: Yellow=G2=SDA, White=G1=SCL).
+- Sensor: BME688 at **I2C 0x77** (NOT 0x76 — confirmed by the on-boot I2C scan), Grove pins
+  **SDA=GPIO2, SCL=GPIO1** (M5 Grove: Yellow=G2=SDA, White=G1=SCL).
+- API: **plaintext native API, no encryption key** — add it in HA by IP:6053 with the key field blank.
 - The screen shows the IP and live Temp/Humidity/IAQ once it's on Wi-Fi.
+- Verified reachable end-to-end over the class tailnet: from an `--accept-routes` peer, the ESPHome API at
+  `<ip>:6053` answers a HelloRequest (`api_version 1.14`, device `cardputer-env-<macsuffix>`) — i.e. HA
+  running in a Codespace on the tailnet will see it.
 
 ## Flashing a batch (esphome on the Mac, no WebSerial needed)
 `cd ~/cardputer-lab && ./flash-cardputer.sh` per device (plug in → run → next). A **brand-new Cardputer flashes

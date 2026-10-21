@@ -23,11 +23,14 @@ a repo prebuild so it starts fast.
    tsup
    tailscale status
    ```
-   You should see your Codespace and the instructor's **device/router** listed. **Note the device's
-   100.x tailnet IP.**
+   `tsup` runs `tailscale up --accept-routes`, so your Codespace picks up the **subnet route** the
+   class router advertises (the `192.168.8.0/24` Wi-Fi the Cardputers are on). You should see the
+   instructor's **router** listed. The Cardputer itself is **not** a tailnet node — you reach it by the
+   **LAN IP shown on its screen** (e.g. `192.168.8.x`), via that subnet route.
 4. **Add the device** (it will *not* auto-discover over Tailscale — see below):
    Settings → **Devices & Services** → **Add Integration** → **ESPHome** →
-   **Host = the device's tailnet IP**, **Port = 6053** (+ API encryption key if set) → Submit.
+   **Host = the IP on the Cardputer screen**, **Port = 6053**, **leave the encryption key blank**
+   (this firmware uses the plaintext native API — no key) → Submit.
 5. Open the new device → watch its **entities** (IAQ, temperature, humidity, …) update live.
 
 ---
@@ -100,8 +103,11 @@ FLASH.md                          flash the Cardputer from Chrome (WebSerial) vi
 - **Login shows "400: Bad Request".** The `http.trusted_proxies` block in `config/configuration.yaml`
   handles the github.dev forwarded-port proxy. If you still hit it, confirm that block is present and
   restart HA: `docker compose restart homeassistant`.
-- **Device never appears / won't connect.** You must `tsup` first and use the device's **tailnet** IP,
-  not a LAN IP. Check `tailscale status` shows the device. If `tsup` errors, the auth key is likely
-  expired — regenerate a reusable key, update the `OTSIM_TAILSCALE_AUTHKEY` Codespaces secret, and
-  restart the Codespace (secrets apply at start).
+- **Device never appears / won't connect.** You must `tsup` first (it runs `--accept-routes`), then add
+  the Cardputer by the **LAN IP on its screen** (e.g. `192.168.8.x`) — reached via the router's subnet
+  route, *not* by a `100.x` tailnet IP (the Cardputer is not a tailnet node). Confirm the route with
+  `tailscale status` (you should see the router) and test reachability with `nc -vz <ip> 6053`. Leave the
+  encryption key blank. If `tsup` errors, the auth key is likely expired — regenerate a reusable key,
+  update the `OTSIM_TAILSCALE_AUTHKEY` Codespaces secret, and restart the Codespace (secrets apply at
+  start).
 - **HA didn't start.** `docker compose up -d homeassistant` then `docker compose logs -f homeassistant`.
