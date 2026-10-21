@@ -1,0 +1,24 @@
+# CS460 Module 5 — Home Assistant base config.
+#
+# default_config pulls in the normal first-run stack (frontend, config flow UI,
+# mobile app, energy, etc.) so students get the full "Add Integration" experience.
+default_config:
+
+# IMPORTANT (Codespaces): HA is reached through the github.dev forwarded-port
+# reverse proxy. Without this block HA sees the proxy's address as the client
+# and rejects the login with "400: Bad Request". network_mode: host means the
+# proxy reaches HA over loopback, so 127.0.0.1/::1 are the trusted proxies;
+# the private ranges cover the tailnet / Docker bridges just in case.
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 127.0.0.1
+    - ::1
+    - 10.0.0.0/8
+    - 172.16.0.0/12
+    - 192.168.0.0/16
+    - 100.64.0.0/10   # Tailscale CGNAT range
+
+# Keep logs readable in class.
+logger:
+  default: warning

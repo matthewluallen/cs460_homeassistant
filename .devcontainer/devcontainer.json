@@ -1,0 +1,23 @@
+{
+  "name": "CS460 Home Assistant (Module 5)",
+  "image": "mcr.microsoft.com/devcontainers/base:bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  // NET_ADMIN + the tun device let tailscaled create tailscale0 inside the
+  // devcontainer (same pattern as cs460_caldera). Home Assistant runs on this
+  // network namespace (network_mode: host in docker-compose), so it can reach
+  // the class tailnet directly.
+  "runArgs": ["--cap-add=NET_ADMIN", "--device=/dev/net/tun"],
+  "onCreateCommand": "bash .devcontainer/setup.sh",
+  "postStartCommand": "bash .devcontainer/post-start.sh",
+  "forwardPorts": [8123],
+  "portsAttributes": {
+    "8123": { "label": "Home Assistant", "onAutoForward": "notify" }
+  },
+  "customizations": {
+    "vscode": {
+      "settings": { "task.allowAutomaticTasks": "on" }
+    }
+  }
+}

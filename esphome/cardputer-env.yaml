@@ -1,0 +1,115 @@
+# CS460 Module 5 — M5Stack Cardputer (ESP32-S3 / StampS3) + ENV Pro (BME688)
+#
+# Flash from the ESPHome dashboard (port 6052) -> Install -> "Plug into this computer" (Chrome WebSerial).
+# On boot the Cardputer SCREEN shows its Wi-Fi status and IP ADDRESS — students read that IP off the screen
+# and use it to add the device in Home Assistant (Add Integration -> ESPHome -> that IP : 6053).
+#
+# Wi-Fi provisioning = CAPTIVE PORTAL: if it can't join a known network it raises a "Cardputer-Setup"
+# hotspot; join it from a phone/laptop and enter Wi-Fi credentials in the browser. No keyboard driver needed.
+#
+# PIN NOTE: the display pins below are the commonly-reported Cardputer values — confirm on your unit; a wrong
+# pin just means a blank screen (the device still works and shows up in HA). I2C pins for the ENV Pro Grove
+# port likewise — confirm (commonly SDA=GPIO2, SCL=GPIO1).
+
+substitutions:
+  name: cardputer-env
+  friendly_name: Cardputer ENV
+
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+
+esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: esp-idf
+
+logger:
+api:
+  encryption:
+    key: !secret api_encryption_key
+ota:
+  - platform: esphome
+
+# ---- Wi-Fi + captive-portal provisioning ----------------------------------
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  ap:
+    ssid: "Cardputer-Setup"          # fallback hotspot for first-time config
+captive_portal:
+
+# IP address as a text sensor so the display (and HA) can show it.
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: "IP Address"
+      id: wifi_ip
+  - platform: bme68x_bsec2
+    iaq_accuracy:
+      name: "IAQ accuracy"
+
+# ---- ENV Pro: BME688 over I2C (temp/humidity/pressure + IAQ) ---------------
+i2c:
+  sda: GPIO2      # <-- confirm for your Cardputer Grove port
+  scl: GPIO1      # <-- confirm for your Cardputer Grove port
+  scan: true
+
+bme68x_bsec2_i2c:
+  address: 0x77   # confirmed on hardware via I2C scan (device answers at 0x77)
+  model: bme688
+  operating_age: 28d
+  sample_rate: LP
+
+sensor:
+  - platform: bme68x_bsec2
+    temperature: { name: "Temperature", id: t }
+    humidity:    { name: "Humidity", id: h }
+    pressure:    { name: "Pressure", id: p }
+    iaq:         { name: "IAQ", id: iaq }
+    co2_equivalent: { name: "CO2 equivalent" }
+    breath_voc_equivalent: { name: "Breath VOC equivalent" }
+
+# ---- Display: show Wi-Fi/IP + live readings on the Cardputer screen --------
+font:
+  - file: "gfonts://Roboto"          # downloaded at build time; no font file to ship
+    id: big
+    size: 22
+  - file: "gfonts://Roboto"
+    id: small
+    size: 14
+
+spi:
+  clk_pin: GPIO36      # <-- confirm (Cardputer TFT SCLK)
+  mosi_pin: GPIO35     # <-- confirm (Cardputer TFT MOSI)
+
+output:
+  - platform: ledc
+    pin: GPIO38        # <-- confirm (Cardputer TFT backlight)
+    id: backlight_out
+light:
+  - platform: monochromatic
+    output: backlight_out
+    name: "Backlight"
+    restore_mode: ALWAYS_ON
+
+display:
+  - platform: st7789v
+    model: TTGO TDisplay 135x240
+    rotation: 90
+    cs_pin: GPIO37       # <-- confirm
+    dc_pin: GPIO34       # <-- confirm
+    reset_pin: GPIO33    # <-- confirm
+    update_interval: 2s
+    lambda: |-
+      it.fill(Color::BLACK);
+      it.printf(4, 2, id(small), "CS460 Cardputer ENV");
+      if (id(wifi_ip).has_state() && id(wifi_ip).state.length() > 0)
+        it.printf(4, 24, id(big), "IP %s", id(wifi_ip).state.c_str());
+      else
+        it.printf(4, 24, id(big), "WiFi: setup AP");
+      if (id(t).has_state())
+        it.printf(4, 66, id(small), "Temp %.1f C   Hum %.0f%%", id(t).state, id(h).state);
+      if (id(iaq).has_state())
+        it.printf(4, 90, id(small), "IAQ %.0f   Pres %.0f hPa", id(iaq).state, id(p).state/100.0);
+      it.printf(4, 114, id(small), "Add in HA: ESPHome -> this IP:6053");

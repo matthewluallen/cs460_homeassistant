@@ -1,0 +1,20 @@
+# Home Assistant runtime state (generated at first run — do not commit)
+config/.storage/
+config/.cloud/
+config/*.db
+config/*.db-*
+config/*.log
+config/*.log.*
+config/.HA_VERSION
+config/.ha_run.lock
+config/home-assistant_v2.db*
+config/tts/
+config/deps/
+config/.uuid
+
+# Ollama models (downloaded on demand)
+ollama/
+
+# ESPHome build artifacts + device secrets
+esphome/.esphome/
+esphome/secrets.yaml

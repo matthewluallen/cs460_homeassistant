@@ -1,0 +1,89 @@
+# CS460 Module 5 — Home Assistant (+ optional device sim and LLM back-ends).
+#
+#   docker compose up -d homeassistant       # the HA server (what the lab uses)
+#   docker compose --profile sim up -d        # ALSO a no-hardware MQTT device
+#   docker compose --profile llm up -d        # ALSO a LOCAL model (Ollama)
+#   docker compose --profile hub up -d        # ALSO the campus LLM-hub adapter
+#   docker compose --profile flash up -d      # ALSO the ESPHome dashboard (flash a device)
+#
+# HA runs on the devcontainer's own network namespace (network_mode: host) so it
+# can reach the class tailnet (tailscale0) created by post-start.sh. Port 8123 is
+# then on the Codespace's localhost and gets auto-forwarded by VS Code.
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: ghcr.io/home-assistant/home-assistant:stable
+    network_mode: host
+    volumes:
+      - ./config:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+
+  # ---- Optional: no-hardware fallback / dry-run device ----------------------
+  mqtt:
+    container_name: mqtt
+    image: eclipse-mosquitto:2
+    profiles: ["sim"]
+    network_mode: host
+    volumes:
+      - ./sim/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+    restart: unless-stopped
+
+  sim-device:
+    container_name: sim-device
+    image: eclipse-mosquitto:2
+    profiles: ["sim"]
+    network_mode: host
+    entrypoint: ["sh", "/pub/publish-sim-device.sh"]
+    volumes:
+      - ./sim:/pub:ro
+    depends_on: [mqtt]
+    restart: unless-stopped
+
+  # ---- Optional (profile: llm): a LOCAL model on this Codespace --------------
+  # Home Assistant -> Settings -> Devices & Services -> Add Integration -> Ollama
+  #   URL = http://127.0.0.1:11434 ; then Add conversation agent, pick the model,
+  #   and turn ON "Control Home Assistant" to let it operate devices via Assist.
+  # Pull a small CPU model first:  docker exec ollama ollama pull qwen2.5:0.5b
+  ollama:
+    container_name: ollama
+    image: ollama/ollama
+    profiles: ["llm"]
+    network_mode: host
+    volumes:
+      - ./ollama:/root/.ollama
+    restart: unless-stopped
+
+  # ---- Optional (profile: flash): ESPHome dashboard — flash the Cardputer -----
+  # Build firmware here and flash the Cardputer over WebSerial FROM YOUR CHROME.
+  # Open the forwarded port 6052, edit esphome/cardputer-env.yaml, then
+  # Install -> "Plug into this computer" (plug the Cardputer into YOUR laptop's
+  # USB; use Chrome or Edge). The Codespace builds + serves; the serial write
+  # happens in your browser to your local USB. After the first USB flash, updates
+  # go OTA over the tailnet.
+  esphome:
+    container_name: esphome
+    image: ghcr.io/esphome/esphome
+    profiles: ["flash"]
+    network_mode: host
+    volumes:
+      - ./esphome:/config
+    restart: unless-stopped
+
+  # ---- Optional (profile: hub): campus LLM hub (chat.illinois.edu) -----------
+  # An Ollama-API-compatible shim so HA's built-in Ollama integration can use a
+  # student's OWN chat.illinois.edu chatbot. Each student sets their own secrets
+  # (ILLINOIS_CHAT_API_KEY, UIUC_COURSE_NAME) — the key is NEVER typed into the HA
+  # UI. Point HA's Ollama integration at http://127.0.0.1:11435 instead of 11434.
+  hub-adapter:
+    container_name: hub-adapter
+    build: ./hub-adapter
+    profiles: ["hub"]
+    network_mode: host
+    environment:
+      - ILLINOIS_CHAT_API_KEY=${ILLINOIS_CHAT_API_KEY:-}
+      - UIUC_COURSE_NAME=${UIUC_COURSE_NAME:-}
+      - UIUC_MODEL=${UIUC_MODEL:-gpt-4o-mini}
+      - UIUC_CHAT_URL=${UIUC_CHAT_URL:-https://chat.illinois.edu/api/chat-api/chat}
+      - ADAPTER_PORT=11435
+    restart: unless-stopped
