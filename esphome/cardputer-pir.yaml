@@ -1,0 +1,12 @@
+# DEVICE: Cardputer + M5 PIR Unit (DIGITAL motion sensor on the white wire).
+# For the I2C TMOS presence unit instead, use cardputer-tmos.yaml.
+substitutions:
+  name: cardputer-pir
+  friendly_name: "Cardputer PIR"
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+packages:
+  base:   !include common/base.yaml
+  host:   !include hosts/cardputer.yaml
+  sensor: !include sensors/pir-digital.yaml

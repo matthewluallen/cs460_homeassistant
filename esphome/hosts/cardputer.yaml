@@ -23,7 +23,7 @@ esp32:
 
 font:
   - file: "gfonts://Roboto"      # downloaded at build time; no font file to ship
-    id: read                     # the BIG centered sensor reading
+    id: huge                     # the BIG centered sensor reading
     size: 34
   - file: "gfonts://Roboto"
     id: big
@@ -61,12 +61,12 @@ display:
       // device name (top-left) + IP (top-right), both small
       it.printf(2, 2, id(small), "${friendly_name}");
       if (id(wifi_ip).has_state() && id(wifi_ip).state.length() > 0)
-        it.printf(238, 2, TextAlign::TOP_RIGHT, id(small), "%s", id(wifi_ip).state.c_str());
+        it.printf(238, 2, id(small), TextAlign::TOP_RIGHT, "%s", id(wifi_ip).state.c_str());
       else
-        it.printf(238, 2, TextAlign::TOP_RIGHT, id(small), "setup AP");
+        it.printf(238, 2, id(small), TextAlign::TOP_RIGHT, "setup AP");
       // BIG live reading, centered — the headline each sensor package fills in
       if (!id(disp_line).empty())
-        it.printf(120, 62, id(read), TextAlign::CENTER, "%s", id(disp_line).c_str());
+        it.printf(120, 62, id(huge), TextAlign::CENTER, "%s", id(disp_line).c_str());
       else
-        it.printf(120, 62, id(read), TextAlign::CENTER, "starting...");
+        it.printf(120, 62, id(huge), TextAlign::CENTER, "starting...");
       it.printf(2, 120, id(small), "HA: ESPHome -> IP:6053");

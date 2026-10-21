@@ -1,0 +1,26 @@
+# SENSOR package: M5 PIR Unit (AS312-style digital PIR). PORT.B digital.
+#   white wire = digital output: HIGH when motion is detected (idles LOW).
+# Reads as a plain gpio binary_sensor on the white-wire GPIO. NO I2C.
+# (If your motion unit is instead the I2C TMOS / STHS34PF80, use sensors/tmos-pir.yaml.)
+#
+# On-screen feedback: big "MOTION!" with a red screen flash while motion is seen,
+# "clear" otherwise.
+
+binary_sensor:
+  - platform: gpio
+    name: "Motion"
+    id: pir_motion
+    device_class: motion
+    pin:
+      number: ${white_pin}
+      mode:
+        input: true
+    # Idles LOW, drives HIGH on motion -> HIGH = motion (no inversion).
+
+interval:
+  - interval: 1s
+    then:
+      - lambda: |-
+          bool m = id(pir_motion).has_state() && id(pir_motion).state;
+          id(disp_line) = m ? std::string("MOTION!") : std::string("clear");
+          id(disp_alert) = m;
