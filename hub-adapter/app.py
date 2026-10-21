@@ -20,12 +20,13 @@ Home Assistant UI.
 """
 import json
 import os
+import re
 import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 API_KEY   = os.environ.get("ILLINOIS_CHAT_API_KEY", "")
 COURSE    = os.environ.get("UIUC_COURSE_NAME", "")
-MODEL     = os.environ.get("UIUC_MODEL", "gpt-4o-mini")
+MODEL     = os.environ.get("UIUC_MODEL", "gemma3:27b")  # verified working for cs460-ha
 CHAT_URL  = os.environ.get("UIUC_CHAT_URL", "https://chat.illinois.edu/api/chat-api/chat")
 PORT      = int(os.environ.get("ADAPTER_PORT", "11435"))
 
@@ -39,6 +40,21 @@ FAKE_MODEL = {
     "details": {"family": "uiuc-chat", "parameter_size": "N/A",
                 "quantization_level": "N/A", "format": "gguf", "families": ["uiuc-chat"]},
 }
+
+
+def _clean_answer(text):
+    """Tidy the hub's answer for Home Assistant's Assist chat.
+
+    The campus hub marks retrieved sources with <cite>N</cite> (sometimes
+    HTML-escaped as &lt;cite&gt;N&lt;/cite&gt;). Those render as literal noise in
+    Assist, so strip them and unescape the few HTML entities the hub emits.
+    """
+    if not text:
+        return text
+    for a, b in (("&lt;", "<"), ("&gt;", ">"), ("&amp;", "&"), ("&quot;", '"'), ("&#39;", "'")):
+        text = text.replace(a, b)
+    text = re.sub(r"</?cite[^>]*>", "", text)   # drop <cite>…</cite> markers
+    return re.sub(r"[ \t]+\n", "\n", text).strip()
 
 
 def ask_campus_hub(messages, temperature):
@@ -64,11 +80,13 @@ def ask_campus_hub(messages, temperature):
     try:
         j = json.loads(raw)
         if isinstance(j, dict):
-            return (j.get("message") or j.get("response")
-                    or j.get("text") or json.dumps(j))[:8000]
-        return str(j)[:8000]
+            text = (j.get("message") or j.get("response")
+                    or j.get("text") or json.dumps(j))
+        else:
+            text = str(j)
     except json.JSONDecodeError:
-        return raw[:8000]
+        text = raw
+    return _clean_answer(text)[:8000]
 
 
 class Handler(BaseHTTPRequestHandler):

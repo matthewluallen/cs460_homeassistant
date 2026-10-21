@@ -18,3 +18,7 @@ ollama/
 # ESPHome build artifacts + device secrets
 esphome/.esphome/
 esphome/secrets.yaml
+
+# Local env (e.g. ILLINOIS_CHAT_API_KEY for the hub adapter) — NEVER commit
+.env
+*.env
