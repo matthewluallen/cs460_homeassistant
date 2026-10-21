@@ -3,6 +3,9 @@
 # This is an I2C THERMAL-presence sensor (not a classic digital PIR): it reports
 # a presence value, a motion value, a temperature, plus two "detected" flags.
 # Uses M5Stack's own ESPHome external component. REQUIRES ESPHome >= 2026.2.2.
+#
+# On-screen feedback: the Cardputer shows a big "MOTION!" / "presence" / "clear"
+# headline and flashes the screen RED when motion or presence is detected.
 
 external_components:
   - source: github://m5stack/esphome-yaml/components
@@ -20,21 +23,31 @@ sensor:
     presence:
       name: "TMOS Presence"
       id: tmos_presence
-      on_value:
-        then:
-          - lambda: |-
-              char b[40]; snprintf(b, sizeof(b), "TMOS presence %.0f", x); id(disp_line) = b;
     motion:
       name: "TMOS Motion"
+      id: tmos_motion
     temperature:
       name: "TMOS Temperature"
     pres_flag:
       name: "TMOS Presence Detected"
+      id: tmos_pres
     mot_flag:
       name: "TMOS Motion Detected"
+      id: tmos_mot
     presence_threshold: 200
     motion_threshold: 200
     presence_hysteresis: 50
     motion_hysteresis: 50
     odr: 8
     update_interval: 1s
+
+# Drive the Cardputer screen every second from the detection flags.
+interval:
+  - interval: 1s
+    then:
+      - lambda: |-
+          bool m = id(tmos_mot).has_state() && id(tmos_mot).state;
+          bool p = id(tmos_pres).has_state() && id(tmos_pres).state;
+          if (m)      { id(disp_line) = "MOTION!";  id(disp_alert) = true; }
+          else if (p) { id(disp_line) = "presence"; id(disp_alert) = true; }
+          else        { id(disp_line) = "clear";    id(disp_alert) = false; }

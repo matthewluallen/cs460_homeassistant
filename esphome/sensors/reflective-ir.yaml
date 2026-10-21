@@ -16,7 +16,9 @@ binary_sensor:
         input: true
     on_state:
       then:
-        - lambda: 'id(disp_line) = x ? std::string("IR: reflect") : std::string("IR: clear");'
+        - lambda: |-
+            id(disp_line) = x ? std::string("REFLECT") : std::string("clear");
+            id(disp_alert) = x;
 
 sensor:
   - platform: adc

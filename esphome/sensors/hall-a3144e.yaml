@@ -15,4 +15,6 @@ binary_sensor:
         input: true
     on_state:
       then:
-        - lambda: 'id(disp_line) = x ? std::string("Magnet: DETECTED") : std::string("Magnet: none");'
+        - lambda: |-
+            id(disp_line) = x ? std::string("MAGNET") : std::string("no magnet");
+            id(disp_alert) = x;

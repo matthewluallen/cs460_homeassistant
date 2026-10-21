@@ -35,10 +35,10 @@ interval:
   - interval: 2s
     then:
       - lambda: |-
-          char b[48];
+          char b[32];
           if (id(t).has_state())
-            snprintf(b, sizeof(b), "T %.1fC H %.0f%% IAQ %.0f",
-                     id(t).state, id(h).state, id(iaq).has_state() ? id(iaq).state : 0.0f);
+            snprintf(b, sizeof(b), "%.0fF %.0f%%", id(t).state * 9.0f / 5.0f + 32.0f, id(h).state);
           else
-            snprintf(b, sizeof(b), "ENV warming up...");
+            snprintf(b, sizeof(b), "warming up");
           id(disp_line) = b;
+          id(disp_alert) = false;

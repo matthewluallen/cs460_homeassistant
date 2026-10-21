@@ -15,4 +15,4 @@ sensor:
     on_value:
       then:
         - lambda: |-
-            char b[32]; snprintf(b, sizeof(b), "Light %.0f lx", x); id(disp_line) = b;
+            char b[24]; snprintf(b, sizeof(b), "%.0f lx", x); id(disp_line) = b; id(disp_alert) = false;

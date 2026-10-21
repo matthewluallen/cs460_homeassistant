@@ -23,6 +23,9 @@ esp32:
 
 font:
   - file: "gfonts://Roboto"      # downloaded at build time; no font file to ship
+    id: read                     # the BIG centered sensor reading
+    size: 34
+  - file: "gfonts://Roboto"
     id: big
     size: 22
   - file: "gfonts://Roboto"
@@ -50,14 +53,20 @@ display:
     cs_pin: GPIO37
     dc_pin: GPIO34
     reset_pin: GPIO33
-    update_interval: 2s
+    update_interval: 1s
     lambda: |-
-      it.fill(Color::BLACK);
-      it.printf(4, 2, id(small), "${friendly_name}");
+      // Red full-screen flash when a sensor package raises disp_alert (motion,
+      // magnet, reflection...). Otherwise black. This is the "visual feedback".
+      it.fill(id(disp_alert) ? Color(0xD0, 0x10, 0x10) : Color::BLACK);
+      // device name (top-left) + IP (top-right), both small
+      it.printf(2, 2, id(small), "${friendly_name}");
       if (id(wifi_ip).has_state() && id(wifi_ip).state.length() > 0)
-        it.printf(4, 24, id(big), "IP %s", id(wifi_ip).state.c_str());
+        it.printf(238, 2, TextAlign::TOP_RIGHT, id(small), "%s", id(wifi_ip).state.c_str());
       else
-        it.printf(4, 24, id(big), "WiFi: setup AP");
+        it.printf(238, 2, TextAlign::TOP_RIGHT, id(small), "setup AP");
+      // BIG live reading, centered — the headline each sensor package fills in
       if (!id(disp_line).empty())
-        it.printf(4, 66, id(small), "%s", id(disp_line).c_str());
-      it.printf(4, 114, id(small), "Add in HA: ESPHome -> this IP:6053");
+        it.printf(120, 62, id(read), TextAlign::CENTER, "%s", id(disp_line).c_str());
+      else
+        it.printf(120, 62, id(read), TextAlign::CENTER, "starting...");
+      it.printf(2, 120, id(small), "HA: ESPHome -> IP:6053");

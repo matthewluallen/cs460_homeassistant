@@ -40,6 +40,12 @@ globals:
     type: std::string
     restore_value: no
     initial_value: '""'
+  # Sensor packages set this true to make the screen flash red (e.g. motion /
+  # magnet / reflection detected), giving obvious at-a-glance visual feedback.
+  - id: disp_alert
+    type: bool
+    restore_value: no
+    initial_value: 'false'
 
 text_sensor:
   - platform: wifi_info
