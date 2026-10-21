@@ -1,0 +1,12 @@
+# DEVICE: AtomS3 LITE + TMOS PIR — screenless host with RGB status LED (green=online).
+# Find its IP in the router client list (hostname = atoms3lite-tmos) or the flash log.
+substitutions:
+  name: atoms3lite-tmos
+  friendly_name: "AtomS3 Lite TMOS"
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+packages:
+  base:   !include common/base.yaml
+  host:   !include hosts/atoms3-lite.yaml
+  sensor: !include sensors/tmos-pir.yaml

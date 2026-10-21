@@ -32,13 +32,19 @@ go OTA over the tailnet.
 
 ## Hosts
 
-| Host | ESPHome board | Grove port pins | Screen |
+| Host package | Board | Grove port pins | Screen / indicator |
 |---|---|---|---|
-| **Cardputer** | esp32-s3-devkitc-1 | white=G1=GPIO1, yellow=G2=GPIO2 | ST7789V2 240×135 (shows IP + reading) |
-| **AtomS3 / Lite** | esp32-s3-devkitc-1 | white=G1=GPIO1, yellow=G2=GPIO2 | none in ESPHome (GC9107 unsupported) — read in HA |
-| **CamS3** | — | **no free sensor port** (Grove is USB D+/D− only) | camera device, not a sensor host |
+| `hosts/cardputer.yaml` | esp32-s3-devkitc-1 | white=G1=GPIO1, yellow=G2=GPIO2 | ST7789V2 240×135 — shows IP + reading |
+| `hosts/atoms3.yaml` (LCD AtomS3) | esp32-s3-devkitc-1 | white=G1=GPIO1, yellow=G2=GPIO2 | none (GC9107 not in core ESPHome) |
+| `hosts/atoms3-lite.yaml` | esp32-s3-devkitc-1 | white=G1=GPIO1, yellow=G2=GPIO2 | RGB status LED (GPIO35): green=online, blue=setup; button GPIO41 |
+| CamS3 | — | **no free sensor port** (Grove is USB D+/D− only) | camera device, not a sensor host |
 
 PORT.A I²C convention on these ports: **SDA = yellow (GPIO2), SCL = white (GPIO1)**.
+
+**No screen? Finding the device's IP to add it in HA:** see **`FINDING-DEVICE-IP.md`** —
+primary method is the GL-iNet **router client list** (each device shows up by its ESPHome
+name as DHCP hostname), best-for-class is **reserved IPs by MAC**, and the **flash log**
+prints the IP on boot. (mDNS/`.local` doesn't cross the tailnet, which is why we use IPs.)
 
 ## Sensors
 

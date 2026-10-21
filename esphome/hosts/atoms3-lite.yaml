@@ -1,0 +1,67 @@
+# HOST package: M5Stack AtomS3 LITE (ESP32-S3) — screenless, but with an onboard
+# RGB LED we use as a connection indicator, plus the front button.
+#
+# Grove/HY2.0 PORT: white = G1 = GPIO1, yellow = G2 = GPIO2 (same as Cardputer/AtomS3).
+# Onboard: 1x WS2812 RGB LED on GPIO35, button on GPIO41.
+#
+# STATUS LED: GREEN once the device has a Wi-Fi IP (joined the network — now find
+# its IP in the router client list by hostname, or the flash log). BLUE while it's
+# still in the first-boot "<name>-Setup" AP / not yet on Wi-Fi. This is how a
+# student without a screen knows the AtomS3 is actually online.
+#
+# (For the LCD AtomS3 variant use hosts/atoms3.yaml instead — its GC9107 screen is
+#  not supported by core ESPHome.)
+
+substitutions:
+  board_id: esp32-s3-devkitc-1
+  sda_pin: GPIO2
+  scl_pin: GPIO1
+  white_pin: GPIO1
+  yellow_pin: GPIO2
+
+esp32:
+  board: ${board_id}
+  framework:
+    type: esp-idf
+
+light:
+  - platform: esp32_rmt_led_strip
+    id: statusled
+    pin: GPIO35
+    num_leds: 1              # AtomS3 Lite has 1 onboard RGB LED (adjust if yours differs)
+    rgb_order: GRB
+    chipset: WS2812
+    name: "Status LED"
+    restore_mode: ALWAYS_OFF
+
+binary_sensor:
+  - platform: gpio
+    name: "Button"
+    pin:
+      number: GPIO41
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+
+# Drive the LED from Wi-Fi state: green = has IP (online), blue = setup/connecting.
+interval:
+  - interval: 2s
+    then:
+      - if:
+          condition:
+            lambda: 'return id(wifi_ip).has_state() && id(wifi_ip).state.length() > 0;'
+          then:
+            - light.turn_on:
+                id: statusled
+                red: 0%
+                green: 100%
+                blue: 0%
+                brightness: 30%
+          else:
+            - light.turn_on:
+                id: statusled
+                red: 0%
+                green: 0%
+                blue: 100%
+                brightness: 30%
