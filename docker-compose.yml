@@ -12,7 +12,13 @@
 services:
   homeassistant:
     container_name: homeassistant
-    image: ghcr.io/home-assistant/home-assistant:stable
+    # Pinned to 2026.7 on purpose. In HA 2026.8.0 the configuration.yaml
+    # `http:` reverse-proxy settings (use_x_forwarded_for / trusted_proxies)
+    # validate but are NOT applied at runtime (they moved to Settings > Network),
+    # which makes HA return "400: Bad Request" behind the github.dev forwarded-port
+    # proxy — and that blocks the onboarding page too, so students can't fix it in
+    # the UI. 2026.7 still honors the YAML block, so the lab works from first boot.
+    image: ghcr.io/home-assistant/home-assistant:2026.7
     network_mode: host
     volumes:
       - ./config:/config

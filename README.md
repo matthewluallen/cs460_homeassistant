@@ -2,8 +2,8 @@
 
 A pre-built **Home Assistant** Codespace for the Module 5 in-person lab. Students open the
 Codespace, Home Assistant starts automatically, they join the class tailnet, and they add an
-**ESPHome device** — an **M5Stack Cardputer (ESP32-S3) + ENV Pro (BME688)** — **by its tailnet IP**,
-then explore its entities. Students can also **flash the Cardputer themselves** from the browser
+**ESPHome device** — an **M5Stack Cardputer (ESP32-S3) + ENV Pro (BME688)** — **by the LAN IP shown
+on its screen** (reached over the tailnet via the class router's subnet route), then explore its entities. Students can also **flash the Cardputer themselves** from the browser
 (see `FLASH.md`).
 
 This mirrors `cs460_caldera`: pre-built, Tailscale baked in, a keep-alive so it survives class, and
