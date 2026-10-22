@@ -54,7 +54,9 @@ else
 fi
 
 # --- Home Assistant --------------------------------------------------------
+bash .devcontainer/seed-instructor.sh
 echo "post-start: starting Home Assistant (docker compose up -d homeassistant)"
+bash .devcontainer/seed-instructor.sh
 docker compose up -d homeassistant || echo "post-start: compose up warning"
 
 echo "post-start: done — the tailnet auto-joins; open the forwarded port 8123. (Manual re-join: 'tsup'.)"
