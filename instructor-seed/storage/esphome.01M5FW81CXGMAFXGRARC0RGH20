@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "esphome.01M5FW81CXGMAFXGRARC0RGH20",
+  "data": {
+    "device_info": {
+      "uses_password": false,
+      "name": "atoms3-hall",
+      "friendly_name": "AtomS3 Hall",
+      "mac_address": "B0:81:84:95:4A:28",
+      "compilation_time": "2026-10-21 13:38:39 -0500",
+      "model": "esp32-s3-devkitc-1",
+      "manufacturer": "Espressif",
+      "has_deep_sleep": false,
+      "esphome_version": "2026.2.2",
+      "project_name": "",
+      "project_version": "",
+      "webserver_port": 0,
+      "legacy_voice_assistant_version": 0,
+      "voice_assistant_feature_flags": 0,
+      "legacy_bluetooth_proxy_version": 0,
+      "bluetooth_proxy_feature_flags": 0,
+      "zwave_proxy_feature_flags": 0,
+      "zwave_home_id": 0,
+      "suggested_area": "",
+      "bluetooth_mac_address": "",
+      "api_encryption_supported": false,
+      "devices": [],
+      "areas": [],
+      "area": {
+        "area_id": 0,
+        "name": ""
+      },
+      "serial_proxies": []
+    },
+    "services": [],
+    "api_version": {
+      "major": 1,
+      "minor": 14
+    },
+    "sensor": [],
+    "text_sensor": [
+      {
+        "object_id": "ip_address",
+        "key": 3849966195,
+        "name": "IP Address",
+        "disabled_by_default": false,
+        "icon": "",
+        "entity_category": 2,
+        "device_id": 0,
+        "device_class": ""
+      }
+    ],
+    "binary_sensor": [
+      {
+        "object_id": "magnet_detected",
+        "key": 2915242196,
+        "name": "Magnet Detected",
+        "disabled_by_default": false,
+        "icon": "",
+        "entity_category": 0,
+        "device_id": 0,
+        "device_class": "",
+        "is_status_binary_sensor": false
+      }
+    ]
+  }
+}

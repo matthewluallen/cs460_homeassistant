@@ -1,0 +1,177 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "esphome.01M5EFY3ZRJD1B317209F4FT0Z",
+  "data": {
+    "device_info": {
+      "uses_password": false,
+      "name": "cardputer-env-5b2760",
+      "friendly_name": "Cardputer ENV 5b2760",
+      "mac_address": "24:58:7C:5B:27:60",
+      "compilation_time": "2026-10-20 22:56:22 -0500",
+      "model": "esp32-s3-devkitc-1",
+      "manufacturer": "Espressif",
+      "has_deep_sleep": false,
+      "esphome_version": "2026.2.2",
+      "project_name": "",
+      "project_version": "",
+      "webserver_port": 0,
+      "legacy_voice_assistant_version": 0,
+      "voice_assistant_feature_flags": 0,
+      "legacy_bluetooth_proxy_version": 0,
+      "bluetooth_proxy_feature_flags": 0,
+      "zwave_proxy_feature_flags": 0,
+      "zwave_home_id": 0,
+      "suggested_area": "",
+      "bluetooth_mac_address": "",
+      "api_encryption_supported": false,
+      "devices": [],
+      "areas": [],
+      "area": {
+        "area_id": 0,
+        "name": ""
+      },
+      "serial_proxies": []
+    },
+    "services": [],
+    "api_version": {
+      "major": 1,
+      "minor": 14
+    },
+    "light": [
+      {
+        "object_id": "backlight",
+        "key": 878769956,
+        "name": "Backlight",
+        "disabled_by_default": false,
+        "icon": "",
+        "entity_category": 0,
+        "device_id": 0,
+        "supported_color_modes": [
+          3
+        ],
+        "min_mireds": 0.0,
+        "max_mireds": 0.0,
+        "effects": [],
+        "legacy_supports_brightness": false,
+        "legacy_supports_rgb": false,
+        "legacy_supports_white_value": false,
+        "legacy_supports_color_temperature": false
+      }
+    ],
+    "sensor": [
+      {
+        "object_id": "temperature",
+        "key": 899752953,
+        "name": "Temperature",
+        "disabled_by_default": false,
+        "icon": "mdi:thermometer",
+        "entity_category": 0,
+        "device_id": 0,
+        "device_class": "temperature",
+        "unit_of_measurement": "°C",
+        "accuracy_decimals": 1,
+        "force_update": false,
+        "state_class": 1,
+        "legacy_last_reset_type": 0
+      },
+      {
+        "object_id": "pressure",
+        "key": 1205348660,
+        "name": "Pressure",
+        "disabled_by_default": false,
+        "icon": "",
+        "entity_category": 0,
+        "device_id": 0,
+        "device_class": "atmospheric_pressure",
+        "unit_of_measurement": "hPa",
+        "accuracy_decimals": 1,
+        "force_update": false,
+        "state_class": 1,
+        "legacy_last_reset_type": 0
+      },
+      {
+        "object_id": "humidity",
+        "key": 3577765598,
+        "name": "Humidity",
+        "disabled_by_default": false,
+        "icon": "mdi:water-percent",
+        "entity_category": 0,
+        "device_id": 0,
+        "device_class": "humidity",
+        "unit_of_measurement": "%",
+        "accuracy_decimals": 1,
+        "force_update": false,
+        "state_class": 1,
+        "legacy_last_reset_type": 0
+      },
+      {
+        "object_id": "iaq",
+        "key": 378036456,
+        "name": "IAQ",
+        "disabled_by_default": false,
+        "icon": "mdi:gauge",
+        "entity_category": 0,
+        "device_id": 0,
+        "device_class": "",
+        "unit_of_measurement": "IAQ",
+        "accuracy_decimals": 0,
+        "force_update": false,
+        "state_class": 1,
+        "legacy_last_reset_type": 0
+      },
+      {
+        "object_id": "co2_equivalent",
+        "key": 418757190,
+        "name": "CO2 equivalent",
+        "disabled_by_default": false,
+        "icon": "",
+        "entity_category": 0,
+        "device_id": 0,
+        "device_class": "carbon_dioxide",
+        "unit_of_measurement": "ppm",
+        "accuracy_decimals": 1,
+        "force_update": false,
+        "state_class": 1,
+        "legacy_last_reset_type": 0
+      },
+      {
+        "object_id": "breath_voc_equivalent",
+        "key": 1572191401,
+        "name": "Breath VOC equivalent",
+        "disabled_by_default": false,
+        "icon": "",
+        "entity_category": 0,
+        "device_id": 0,
+        "device_class": "volatile_organic_compounds_parts",
+        "unit_of_measurement": "ppm",
+        "accuracy_decimals": 1,
+        "force_update": false,
+        "state_class": 1,
+        "legacy_last_reset_type": 0
+      }
+    ],
+    "text_sensor": [
+      {
+        "object_id": "ip_address",
+        "key": 3849966195,
+        "name": "IP Address",
+        "disabled_by_default": false,
+        "icon": "",
+        "entity_category": 2,
+        "device_id": 0,
+        "device_class": ""
+      },
+      {
+        "object_id": "iaq_accuracy",
+        "key": 572232300,
+        "name": "IAQ accuracy",
+        "disabled_by_default": false,
+        "icon": "mdi:checkbox-marked-circle-outline",
+        "entity_category": 0,
+        "device_id": 0,
+        "device_class": ""
+      }
+    ]
+  }
+}

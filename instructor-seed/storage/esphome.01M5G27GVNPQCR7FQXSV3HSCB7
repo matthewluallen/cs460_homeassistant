@@ -1,0 +1,254 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "esphome.01M5G27GVNPQCR7FQXSV3HSCB7",
+  "data": {
+    "device_info": {
+      "uses_password": false,
+      "name": "stampfly2-sensors",
+      "friendly_name": "StampFly 2 Sensors",
+      "mac_address": "48:CA:43:39:00:68",
+      "compilation_time": "2026-10-21 15:23:41 -0500",
+      "model": "esp32-s3-devkitc-1",
+      "manufacturer": "Espressif",
+      "has_deep_sleep": false,
+      "esphome_version": "2026.2.2",
+      "project_name": "",
+      "project_version": "",
+      "webserver_port": 0,
+      "legacy_voice_assistant_version": 0,
+      "voice_assistant_feature_flags": 0,
+      "legacy_bluetooth_proxy_version": 0,
+      "bluetooth_proxy_feature_flags": 0,
+      "zwave_proxy_feature_flags": 0,
+      "zwave_home_id": 0,
+      "suggested_area": "",
+      "bluetooth_mac_address": "",
+      "api_encryption_supported": false,
+      "devices": [],
+      "areas": [],
+      "area": {
+        "area_id": 0,
+        "name": ""
+      },
+      "serial_proxies": []
+    },
+    "services": [],
+    "api_version": {
+      "major": 1,
+      "minor": 14
+    },
+    "sensor": [
+      {
+        "object_id": "cabin_temperature",
+        "key": 3477997507,
+        "name": "Cabin Temperature",
+        "disabled_by_default": false,
+        "icon": "",
+        "entity_category": 0,
+        "device_id": 0,
+        "device_class": "temperature",
+        "unit_of_measurement": "°C",
+        "accuracy_decimals": 1,
+        "force_update": false,
+        "state_class": 1,
+        "legacy_last_reset_type": 0
+      },
+      {
+        "object_id": "barometric_pressure",
+        "key": 2687614975,
+        "name": "Barometric Pressure",
+        "disabled_by_default": false,
+        "icon": "",
+        "entity_category": 0,
+        "device_id": 0,
+        "device_class": "pressure",
+        "unit_of_measurement": "hPa",
+        "accuracy_decimals": 1,
+        "force_update": false,
+        "state_class": 1,
+        "legacy_last_reset_type": 0
+      },
+      {
+        "object_id": "power_ch1_voltage",
+        "key": 651723292,
+        "name": "Power Ch1 Voltage",
+        "disabled_by_default": false,
+        "icon": "",
+        "entity_category": 0,
+        "device_id": 0,
+        "device_class": "voltage",
+        "unit_of_measurement": "V",
+        "accuracy_decimals": 2,
+        "force_update": false,
+        "state_class": 1,
+        "legacy_last_reset_type": 0
+      },
+      {
+        "object_id": "power_ch1_current",
+        "key": 2454991101,
+        "name": "Power Ch1 Current",
+        "disabled_by_default": false,
+        "icon": "",
+        "entity_category": 0,
+        "device_id": 0,
+        "device_class": "current",
+        "unit_of_measurement": "A",
+        "accuracy_decimals": 2,
+        "force_update": false,
+        "state_class": 1,
+        "legacy_last_reset_type": 0
+      },
+      {
+        "object_id": "power_ch2_voltage",
+        "key": 247096315,
+        "name": "Power Ch2 Voltage",
+        "disabled_by_default": false,
+        "icon": "",
+        "entity_category": 0,
+        "device_id": 0,
+        "device_class": "voltage",
+        "unit_of_measurement": "V",
+        "accuracy_decimals": 2,
+        "force_update": false,
+        "state_class": 1,
+        "legacy_last_reset_type": 0
+      },
+      {
+        "object_id": "power_ch2_current",
+        "key": 3983672578,
+        "name": "Power Ch2 Current",
+        "disabled_by_default": false,
+        "icon": "",
+        "entity_category": 0,
+        "device_id": 0,
+        "device_class": "current",
+        "unit_of_measurement": "A",
+        "accuracy_decimals": 2,
+        "force_update": false,
+        "state_class": 1,
+        "legacy_last_reset_type": 0
+      },
+      {
+        "object_id": "power_ch3_voltage",
+        "key": 248297970,
+        "name": "Power Ch3 Voltage",
+        "disabled_by_default": false,
+        "icon": "",
+        "entity_category": 0,
+        "device_id": 0,
+        "device_class": "voltage",
+        "unit_of_measurement": "V",
+        "accuracy_decimals": 2,
+        "force_update": false,
+        "state_class": 1,
+        "legacy_last_reset_type": 0
+      },
+      {
+        "object_id": "power_ch3_current",
+        "key": 945697415,
+        "name": "Power Ch3 Current",
+        "disabled_by_default": false,
+        "icon": "",
+        "entity_category": 0,
+        "device_id": 0,
+        "device_class": "current",
+        "unit_of_measurement": "A",
+        "accuracy_decimals": 2,
+        "force_update": false,
+        "state_class": 1,
+        "legacy_last_reset_type": 0
+      }
+    ],
+    "text_sensor": [
+      {
+        "object_id": "ip_address",
+        "key": 3849966195,
+        "name": "IP Address",
+        "disabled_by_default": false,
+        "icon": "",
+        "entity_category": 2,
+        "device_id": 0,
+        "device_class": ""
+      }
+    ],
+    "light": [
+      {
+        "object_id": "motor_fl__test_spin_",
+        "key": 897144309,
+        "name": "Motor FL (test spin)",
+        "disabled_by_default": false,
+        "icon": "",
+        "entity_category": 0,
+        "device_id": 0,
+        "supported_color_modes": [
+          3
+        ],
+        "min_mireds": 0.0,
+        "max_mireds": 0.0,
+        "effects": [],
+        "legacy_supports_brightness": false,
+        "legacy_supports_rgb": false,
+        "legacy_supports_white_value": false,
+        "legacy_supports_color_temperature": false
+      },
+      {
+        "object_id": "motor_fr__test_spin_",
+        "key": 172723559,
+        "name": "Motor FR (test spin)",
+        "disabled_by_default": false,
+        "icon": "",
+        "entity_category": 0,
+        "device_id": 0,
+        "supported_color_modes": [
+          3
+        ],
+        "min_mireds": 0.0,
+        "max_mireds": 0.0,
+        "effects": [],
+        "legacy_supports_brightness": false,
+        "legacy_supports_rgb": false,
+        "legacy_supports_white_value": false,
+        "legacy_supports_color_temperature": false
+      },
+      {
+        "object_id": "motor_rl__test_spin_",
+        "key": 3038799825,
+        "name": "Motor RL (test spin)",
+        "disabled_by_default": false,
+        "icon": "",
+        "entity_category": 0,
+        "device_id": 0,
+        "supported_color_modes": [
+          3
+        ],
+        "min_mireds": 0.0,
+        "max_mireds": 0.0,
+        "effects": [],
+        "legacy_supports_brightness": false,
+        "legacy_supports_rgb": false,
+        "legacy_supports_white_value": false,
+        "legacy_supports_color_temperature": false
+      },
+      {
+        "object_id": "motor_rr__test_spin_",
+        "key": 2119219931,
+        "name": "Motor RR (test spin)",
+        "disabled_by_default": false,
+        "icon": "",
+        "entity_category": 0,
+        "device_id": 0,
+        "supported_color_modes": [
+          3
+        ],
+        "min_mireds": 0.0,
+        "max_mireds": 0.0,
+        "effects": [],
+        "legacy_supports_brightness": false,
+        "legacy_supports_rgb": false,
+        "legacy_supports_white_value": false,
+        "legacy_supports_color_temperature": false
+      }
+    ]
+  }
+}

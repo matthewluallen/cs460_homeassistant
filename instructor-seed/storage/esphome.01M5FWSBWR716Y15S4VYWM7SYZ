@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "esphome.01M5FWSBWR716Y15S4VYWM7SYZ",
+  "data": {
+    "device_info": {
+      "uses_password": false,
+      "name": "atoms3-reflective",
+      "friendly_name": "AtomS3 Reflective",
+      "mac_address": "24:58:7C:5C:EE:94",
+      "compilation_time": "2026-10-21 13:48:22 -0500",
+      "model": "esp32-s3-devkitc-1",
+      "manufacturer": "Espressif",
+      "has_deep_sleep": false,
+      "esphome_version": "2026.2.2",
+      "project_name": "",
+      "project_version": "",
+      "webserver_port": 0,
+      "legacy_voice_assistant_version": 0,
+      "voice_assistant_feature_flags": 0,
+      "legacy_bluetooth_proxy_version": 0,
+      "bluetooth_proxy_feature_flags": 0,
+      "zwave_proxy_feature_flags": 0,
+      "zwave_home_id": 0,
+      "suggested_area": "",
+      "bluetooth_mac_address": "",
+      "api_encryption_supported": false,
+      "devices": [],
+      "areas": [],
+      "area": {
+        "area_id": 0,
+        "name": ""
+      },
+      "serial_proxies": []
+    },
+    "services": [],
+    "api_version": {
+      "major": 1,
+      "minor": 14
+    },
+    "sensor": [
+      {
+        "object_id": "reflective_ir_analog",
+        "key": 1034366211,
+        "name": "Reflective IR Analog",
+        "disabled_by_default": false,
+        "icon": "",
+        "entity_category": 0,
+        "device_id": 0,
+        "device_class": "voltage",
+        "unit_of_measurement": "V",
+        "accuracy_decimals": 2,
+        "force_update": false,
+        "state_class": 1,
+        "legacy_last_reset_type": 0
+      }
+    ],
+    "text_sensor": [
+      {
+        "object_id": "ip_address",
+        "key": 3849966195,
+        "name": "IP Address",
+        "disabled_by_default": false,
+        "icon": "",
+        "entity_category": 2,
+        "device_id": 0,
+        "device_class": ""
+      }
+    ],
+    "binary_sensor": [
+      {
+        "object_id": "reflective_ir_detected",
+        "key": 1434440921,
+        "name": "Reflective IR Detected",
+        "disabled_by_default": false,
+        "icon": "",
+        "entity_category": 0,
+        "device_id": 0,
+        "device_class": "",
+        "is_status_binary_sensor": false
+      }
+    ]
+  }
+}
